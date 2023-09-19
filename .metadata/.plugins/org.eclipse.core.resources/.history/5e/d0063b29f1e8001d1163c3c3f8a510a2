@@ -1,0 +1,64 @@
+package ilstu.edu;
+
+public class MorseTree {
+
+	protected Node root;
+	protected boolean addReturn;
+	
+	private class Node {
+		private Node left; 
+		private Node right;
+		private char letter;
+		
+		protected Node (char letter) {
+			this.letter = letter;
+		}
+		
+		public String toString() {
+			StringBuilder stringBuilder = new StringBuilder();
+			stringBuilder.append(this.letter);
+			return stringBuilder.toString();
+		}
+	}
+	
+	public boolean add(char letter) {
+		this.root = add(letter,this.root);
+		return add(letter, this.root);
+	}
+	private Node add(char letter, Node start) {
+		if (start == null) {
+			addReturn = true;
+			return new Node(letter);
+		}
+		boolean result = letter == start.letter;
+		if (result) {
+			addReturn = false;
+			return start;
+		}
+		if (!result)
+			start.left=add(letter,start.left);
+		else
+			start.right= add(letter, start.right);
+		return start;
+	}
+	
+	void insert(char letter)  { 
+        root = insert_Recursive(root, letter); 
+    } 
+   
+    //recursive insert function
+    Node insert_Recursive(Node root, char letter) { 
+          //tree is empty
+        if (root == null) { 
+            root = new Node(letter); 
+            return root; 
+        } 
+        //traverse the tree
+        if (letter < root.letter)     //insert in the left subtree
+            root.left = insert_Recursive(root.left, letter); 
+        else if (letter > root.letter)    //insert in the right subtree
+            root.right = insert_Recursive(root.right, letter); 
+          // return pointer
+        return root; 
+    } 
+}

@@ -1,0 +1,86 @@
+package ilstu.edu;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+/**
+ * The MainClass controls the flow of the program and will keep prompting the user
+ * to enter an encoded message until stop is entered, and returns the message
+ * decoded.
+ * @author miwema
+ *
+ */
+public class MainClass {
+	public static void main(String args[]) throws FileNotFoundException {
+		
+		//calls the method to build the MorseTree and saves the returned tree
+		MorseTree morseTree = buildTree();
+		Scanner input = new Scanner(System.in);
+		
+		System.out.print("Please enter encoded message or stop to exit: ");
+		String encodedMessage = input.nextLine();
+		System.out.println();
+		
+		//keeps looping until stop is entered
+		while (encodedMessage.compareTo("stop") != 0) {
+			
+			//splits the string into an array delimited by the spaces between each letter
+			//and then calls the decode method using the array and the MorseTree build earlier
+			//and prints the string returned
+			System.out.println(decode(encodedMessage.split(" "), morseTree));
+			
+			//prompts the user and saves the entered data
+			System.out.print("Please enter encoded message or stop to exit: ");
+			encodedMessage = input.nextLine();
+			System.out.println();
+		}
+	}
+	
+	/**
+	 * The buildTree() method is will read the MorseCode.txt file, this file has
+	 * a letter and next to it its associated morse code separated by a comma in each line.
+	 * The file is read and calls the add() method on the MorseTree and send the letter and
+	 * its associated morse code to build the tree.
+	 * @return morseTree - the tree that was built
+	 * @throws FileNotFoundException
+	 */
+	public static MorseTree buildTree() throws FileNotFoundException {
+		
+		//creates the file object and the scanner object to read the file
+		File morseCode = new File("MorseCode.txt");
+		Scanner morseCodeFile = new Scanner(morseCode);
+		
+		//calls default MorseTree constructor
+		MorseTree morseTree = new MorseTree();
+		
+		//goes through the file pulling the letter and code and adds it to the tree until the file is read through
+		while (morseCodeFile.hasNextLine()) {
+			String [] code = morseCodeFile.nextLine().split(",");
+			morseTree.add(code[0].charAt(0), code[1]);
+		}
+		return morseTree;
+	}
+	
+	/**
+	 * The decode() method takes two parameters, a String array for the whole message
+	 * and the MorseTree object. This will go through each morse code letter and call
+	 * the decode method on the MorseTree object sending each string in the array of strings
+	 * @param encodedLetters - the code entered by the user
+	 * @param morseTree -  the MoreseTree of letters
+	 * @return the StringBuilder string of the associated letter
+	 */
+	public static String decode(String [] encodedLetters, MorseTree morseTree) {
+		
+		//creates the StringBuilder object to append the letter to
+		StringBuilder stringBuilder = new StringBuilder();
+		
+		//loops though the String array calling the deconde method on the MorseTree with the
+		//current String array position
+		for (int i = 0; i < encodedLetters.length; i++) {
+			stringBuilder.append(morseTree.decode(encodedLetters[i]));
+		}
+		stringBuilder.append("\n");
+		return stringBuilder.toString();
+	}
+}

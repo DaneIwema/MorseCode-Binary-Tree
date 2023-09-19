@@ -1,0 +1,106 @@
+package ilstu.edu;
+
+/**
+ * The MorseTree class is used to create a Binary Search Tree and
+ * be able to iterate through the tree to decode binary messages. 
+ * @author miwema
+ *
+ */
+public class MorseTree {
+
+	protected Node root;
+	
+	/**
+	 * The Node class represents each letter and their location 
+	 * in the binary search tree. It holds a Node for the left
+	 * and a Node for the right. It also holds a char for the 
+	 * letter of the node.
+	 * @author miwema
+	 *
+	 */
+	private class Node {
+		private Node left; 
+		private Node right;
+		private char letter;
+		
+		/**
+		 * The Node constructor takes in a letter and creates a Node
+		 * for the binary search tree.
+		 * @param letter
+		 */
+		private Node (char letter) {
+			this.letter = letter;
+		}
+	}
+	
+	/**
+	 * the default constructor for the MorseTree class.
+	 * This creates the root node as the root node does
+	 * contain a letter, it is the starting point for traversal.
+	 */
+	public MorseTree() {
+		root = new Node(' ');
+	}
+	
+	/**
+	 * The add() method takes two parameters, a char and a string. 
+	 * This method calls the recursive method to add the letter into
+	 * the binary search tree using its morse code.
+	 * @param letter - the letter in the Binary Search Tree
+	 * @param morse - the letter's morse code.
+	 */
+	public void add(char letter, String morse) { 
+		root = add(root, letter, morse); 
+	}
+	private Node add(Node start, char letter, String morse) {
+		
+		//Base case check if both the code is ended and if the current spot is null
+		if (morse.compareTo("") == 0 && start == null) {
+			start = new Node(letter);
+			return start;
+		}
+		
+		//baseCase check if the code is empty and uses the current spot for the letter
+		else if (morse.compareTo("") == 0) {
+			start.letter = letter;
+			return start;
+		}
+		
+		//If there is no spot, one is created as a place holder without a letter
+		else if (start == null)
+			start = new Node(' ');
+		
+		//checks for a dot to move to the left
+		if (morse.charAt(0) == '.')
+			start.left = add (start.left, letter, morse.substring(1));
+		
+		//checks for a dash to move to the right
+		if (morse.charAt(0) == '-')
+			start.right = add (start.right, letter, morse.substring(1));
+	
+		return start;
+	}
+	
+	/**
+	 * The decode method is a recursive method that takes a String parameter
+	 * and iterates through the Binary Search Tree depending on the first char of the string
+	 * @param encodedLetter - is the morse code for the letter
+	 * @return
+	 */
+	public char decode(String encodedLetter) {
+		return decode(root, encodedLetter);
+	}
+	private char decode(Node start, String encodedLetter) {
+		
+		//Base case check if the end of the string is reached and returns the letter
+		if (encodedLetter.compareTo("") ==0 )
+			return start.letter;
+		
+		//checks if it is a dot and moves left
+		if (encodedLetter.charAt(0) == '.')
+			return decode(start.left, encodedLetter.substring(1));
+		
+		//moves to the right if its not a dot
+		return decode(start.right, encodedLetter.substring(1));
+	}
+}

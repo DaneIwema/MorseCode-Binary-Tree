@@ -1,0 +1,40 @@
+package ilstu.edu;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+public class MainClass {
+	public static void main(String args[]) throws FileNotFoundException {
+		MorseTree morseTree = buildTree();
+		Scanner input = new Scanner(System.in);
+		String encodedMessage = "";
+		while (encodedMessage != "stop") {
+			System.out.println("Please enter encoded message or stop to exit: ");
+			encodedMessage = input.nextLine();
+			System.out.println(encodedMessage);
+			if (encodedMessage.compareTo("stop") == 0)
+				break;
+			System.out.println(decode(encodedMessage.split(" "), morseTree));
+		}
+	}
+	
+	public static MorseTree buildTree() throws FileNotFoundException {
+		File morseCode = new File("MorseCode.txt");
+		Scanner morseCodeFile = new Scanner(morseCode);
+		MorseTree morseTree = new MorseTree();
+		while (morseCodeFile.hasNextLine()) {
+			String [] code = morseCodeFile.nextLine().split(",");
+			morseTree.add(code[0].charAt(0), code[1]);
+		}
+		return morseTree;
+	}
+	
+	public static String decode(String [] encodedLetters, MorseTree morseTree) {
+		StringBuilder stringBuilder = new StringBuilder();
+		for (int i = 0; i < encodedLetters.length; i++) {
+			stringBuilder.append(morseTree.decode(encodedLetters[i]));
+		}
+		return stringBuilder.toString();
+	}
+}

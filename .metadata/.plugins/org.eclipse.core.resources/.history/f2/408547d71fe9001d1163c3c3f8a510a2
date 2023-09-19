@@ -1,0 +1,26 @@
+package ilstu.edu;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+public class MainClass {
+	public static void main(String args[]) throws FileNotFoundException {
+		MorseTree morseTree = buildTree();
+	}
+	
+	public static MorseTree buildTree() throws FileNotFoundException {
+		File morseCode = new File("MorseCode.txt");
+		Scanner morseCodeFile = new Scanner(morseCode);
+		MorseTree morseTree = new MorseTree();
+		while (morseCodeFile.hasNextLine()) {
+			System.out.println("hi");
+			morseTree.add(morseCodeFile.next().charAt(0), morseCodeFile.next());
+		}
+		return morseTree;
+	}
+	
+	public void decode() {
+		
+	}
+}
